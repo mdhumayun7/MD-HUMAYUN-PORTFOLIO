@@ -15,6 +15,9 @@ import { lazy } from 'react'
 // ===========================================================================
 
 export const simulations = {
+  'battleworld-mission': lazy(() =>
+    import('./drone-flight/battlefield/BattleWorldSim').then((m) => ({ default: m.BattleWorldSim })),
+  ),
   'drone-flight': lazy(() =>
     import('./drone-flight/DroneFlightSim').then((m) => ({ default: m.DroneFlightSim })),
   ),

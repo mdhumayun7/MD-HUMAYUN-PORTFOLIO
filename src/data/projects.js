@@ -63,6 +63,7 @@ export const projects = [
     simulationIds: [
       { id: 'swarm-commander', label: 'Commander comparison - the research benchmark' },
       { id: 'drone-flight', label: 'Flight-dynamics demo - interaction design, not the benchmark' },
+      { id: 'battleworld-mission', label: 'BattleWorld mission - a swarm-vs-sentries scenario built for fun on the same flight model' },
     ],
     deepDive: [
       {
