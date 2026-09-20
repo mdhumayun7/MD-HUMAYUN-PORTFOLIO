@@ -60,6 +60,7 @@ export const projects = [
       { label: 'LoRA mean token accuracy', value: '91.2%' },
       { label: 'Training loss', value: '0.463' },
     ],
+    simulationId: 'swarm-commander',
     deepDive: [
       {
         heading: 'Why a uniform 12-dimensional state interface',
@@ -129,6 +130,103 @@ export const projects = [
           { id: 'tune', label: 'Fine-tune', detail: 'LoRA on labels' },
           { id: 'sim', label: 'Simulate', detail: 'BattleWorld rollout' },
           { id: 'score', label: 'Score', detail: 'action accuracy' },
+        ],
+      },
+    },
+  },
+
+  // -------------------------------------------------------------------
+  {
+    id: 'vipergpt',
+    title: 'Spatial Mental Modeling from Limited Views',
+    tagline:
+      'Reproducing and extending ViperGPT, then finding out that a no-program baseline beats it on two benchmarks.',
+    discipline: 'ML',
+    period: '2025 - 2026',
+    status: 'research',
+    tech: [
+      'Python',
+      'ViperGPT',
+      'GLIP',
+      'Qwen2.5-Coder',
+      'DeepSeek-Coder-V2-Lite',
+      'SLURM',
+    ],
+    problem:
+      'ViperGPT (Suris et al., ICCV 2023) answers a visual question by having a language model write a short Python program against a fixed API of vision primitives, then executing it. That is an appealing idea for spatial reasoning specifically, because the program is inspectable -- but it depends entirely on two things nobody had stress-tested together: whether the prompt actually specifies the API precisely enough for a smaller open model to use it correctly, and whether generating a program helps at all once you compare it honestly against just answering directly.',
+    contribution:
+      'I reproduced ViperGPT end to end on the SVNIT HPC cluster (H100 NVL GPUs via SLURM) and ran a four-condition prompt study, C1 through C4, which surfaced a specification gap that did not shrink as models got bigger -- larger models still misused the API the same way smaller ones did unless the prompt closed the gap directly. I extended the API with depth-grounded primitives (depth_order, is_behind) grounded in monocular depth estimates, which measurably improved accuracy on depth-dependent queries. I then ran a generalisation sweep across four open code models (Qwen2.5-Coder, DeepSeek-Coder-V2-Lite, Yi-Coder-9B, OpenCoder-8B) across conditions and two datasets, RefCOCO and RefCOCO+, adding a fifth condition, C5, that asks the generator for descriptive phrases instead of bare nouns. Compiling GLIP for the H100\'s sm_90 architecture, which required patching removed THC headers and correcting build flags, was its own piece of infrastructure work underneath all of this.',
+    metrics: [
+      { label: 'Prompt conditions tested', value: 'C1 - C5' },
+      { label: 'Generator models compared', value: '4' },
+      { label: 'Datasets', value: 'RefCOCO, RefCOCO+' },
+      { label: 'Write-up', value: '56 pages' },
+    ],
+    deepDive: [
+      {
+        heading: 'The finding I did not expect to publish',
+        body: 'I built a no-program baseline, B0, that skips code generation entirely and just runs find() on the full query. It outperformed every generated-program condition on both RefCOCO and RefCOCO+. That is not a flattering result for the approach I spent the most time extending, but it is the most useful one in the repository: it means the value ViperGPT\'s program-synthesis step adds is not yet established on these benchmarks, and any claim about the depth-grounded primitives has to be read against that baseline, not against zero.',
+      },
+      {
+        heading: 'A gap that scale did not close',
+        body: 'The C1-C4 study varied how explicitly the prompt specified the API. The resulting errors looked the same shape across model sizes -- this was a specification problem, not a capacity problem, which is why C5 targeted the prompt itself (descriptive phrases instead of bare nouns into find()) rather than trying a bigger model. C5\'s effect still depended on which generator was running it: a real gain for Qwen and DeepSeek, a slight loss for Yi.',
+      },
+      {
+        heading: 'Depth grounding, and why it needed its own sign check',
+        body: 'The depth-order and is_behind primitives are only as good as the depth map underneath them, and monocular depth estimators are not universally oriented the same way. Verifying the actual sign convention of the estimator in use, rather than assuming it matched the paper\'s, was a one-line fix that would otherwise have silently inverted every depth comparison.',
+      },
+      {
+        heading: 'Infrastructure most reviewers will not see',
+        body: 'Two separate conda environments (one for ViperGPT, one for GLIP) split at a fixed programs.jsonl boundary, GLIP recompiled for sm_90 with corrected tensor input handling, and the retired Codex generator replaced with Qwen2.5-Coder -- none of this appears in a results table, all of it was necessary before one existed.',
+      },
+    ],
+    diagrams: {
+      arch: {
+        caption:
+          'A generated program calls into an extended primitive set; the no-program baseline bypasses generation entirely and is evaluated on the same input.',
+        lanes: [
+          {
+            title: 'Input',
+            nodes: [
+              { id: 'img', label: 'Image + query' },
+            ],
+          },
+          {
+            title: 'Program path',
+            nodes: [
+              { id: 'gen', label: 'Code generator', note: 'Qwen2.5-Coder et al.' },
+              { id: 'prog', label: 'Generated program' },
+            ],
+          },
+          {
+            title: 'Execution',
+            nodes: [
+              { id: 'api', label: 'ViperGPT API', note: '+ depth_order, is_behind' },
+              { id: 'glip', label: 'GLIP', note: 'grounding, sm_90' },
+            ],
+          },
+          {
+            title: 'Baseline',
+            nodes: [
+              { id: 'b0', label: 'B0: find(query)[0]', note: 'no program' },
+            ],
+          },
+        ],
+        links: [
+          { from: 'img', to: 'gen' },
+          { from: 'gen', to: 'prog' },
+          { from: 'prog', to: 'api' },
+          { from: 'api', to: 'glip' },
+          { from: 'img', to: 'b0' },
+        ],
+      },
+      flow: {
+        caption: 'One condition of the generalisation sweep: every model and dataset combination run against both paths.',
+        steps: [
+          { id: 'prompt', label: 'Prompt variant', detail: 'C1 - C5' },
+          { id: 'model', label: 'Generator', detail: '4 models' },
+          { id: 'run', label: 'Execute', detail: 'program or B0' },
+          { id: 'score', label: 'Score', detail: 'RefCOCO / RefCOCO+' },
         ],
       },
     },

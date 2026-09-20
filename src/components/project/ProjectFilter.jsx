@@ -16,7 +16,7 @@ function FilterGroup({ legend, options, value, onChange, allLabel }) {
             aria-pressed={active}
             onClick={() => onChange(opt.id)}
             className={cn(
-              'border px-2.5 py-1 text-micro transition-colors',
+              'border px-3 py-1.5 text-micro transition-colors sm:px-2.5 sm:py-1',
               active
                 ? 'border-accent bg-accent text-bg'
                 : 'border-line text-muted hover:border-accent hover:text-accent',

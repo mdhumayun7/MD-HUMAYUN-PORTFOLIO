@@ -150,13 +150,23 @@ export function LaneLabel({ x, y, children }) {
 
 /**
  * Horizontal scroll container. Diagrams keep a fixed minimum width so text
- * never shrinks below readable size; on a phone the diagram scrolls sideways
- * rather than becoming illegible.
+ * never shrinks below readable size; on a phone or tablet the diagram
+ * scrolls sideways rather than becoming illegible.
+ *
+ * The right-edge fade is a static hint that there is more to scroll to --
+ * cheap to render (pure CSS, no scroll-position JS) and disappears on
+ * screens wide enough that the diagram already fits.
  */
 export function DiagramScroller({ minWidth, children }) {
   return (
-    <div className="-mx-5 overflow-x-auto px-5 sm:mx-0 sm:px-0">
-      <div style={{ minWidth }}>{children}</div>
+    <div className="relative -mx-5 sm:mx-0">
+      <div className="overflow-x-auto px-5 pb-1 sm:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+        <div style={{ minWidth }}>{children}</div>
+      </div>
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-bg to-transparent sm:hidden"
+      />
     </div>
   )
 }

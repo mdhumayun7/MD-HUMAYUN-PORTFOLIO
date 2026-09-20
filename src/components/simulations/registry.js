@@ -15,6 +15,9 @@ import { lazy } from 'react'
 // ===========================================================================
 
 export const simulations = {
+  'swarm-commander': lazy(() =>
+    import('./SwarmCommanderSim').then((m) => ({ default: m.SwarmCommanderSim })),
+  ),
   'ddos-pipeline': lazy(() =>
     import('./DdosPipelineSim').then((m) => ({ default: m.DdosPipelineSim })),
   ),

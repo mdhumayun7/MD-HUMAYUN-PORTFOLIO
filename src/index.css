@@ -34,12 +34,36 @@ html {
   -webkit-text-size-adjust: 100%;
 }
 
+/* Safety net for phones and tablets: one element overflowing its container
+   by even a pixel makes the whole page scroll sideways on mobile browsers.
+   Everything that is deliberately wider than the viewport (diagrams, the
+   simulations) scrolls inside its own container instead -- see
+   DiagramScroller and the sim wrappers -- so the page itself never should. */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 body {
   background-color: var(--c-bg);
   color: var(--c-fg);
   font-family: 'Inter', system-ui, sans-serif;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+/* Touch targets: anything meant to be tapped gets Apple/Material's 44px
+   minimum on touch devices, without changing its size on a mouse-driven
+   desktop layout. */
+@media (pointer: coarse) {
+  button, a {
+    min-height: 44px;
+  }
+  /* Inline text links inside a paragraph would otherwise all grow to 44px
+     and blow out the line height -- exempt them. */
+  p a, li a, dd a, figcaption a {
+    min-height: 0;
+  }
 }
 
 /* Fraunces is a variable font. These axis settings give it character

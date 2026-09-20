@@ -189,7 +189,8 @@ export function DdosPipelineSim() {
         </div>
       }
     >
-      <div className="-mx-4 overflow-x-auto px-4">
+      <div className="relative -mx-4">
+        <div className="overflow-x-auto px-4 pb-1" style={{ WebkitOverflowScrolling: 'touch' }}>
         <div style={{ minWidth: W }}>
           <svg viewBox={`0 0 ${W} ${H}`} width="100%" role="img"
                aria-label="Three hosts connected to an OpenFlow switch and a server, with a controller above the switch">
@@ -310,6 +311,11 @@ export function DdosPipelineSim() {
             </text>
           </svg>
         </div>
+        </div>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute right-0 top-0 h-full w-8 bg-gradient-to-l from-bg to-transparent sm:hidden"
+        />
       </div>
 
       {/* Live readouts */}
