@@ -21,7 +21,9 @@ const STATUS_COPY = {
  * only a title and a description still renders correctly.
  */
 export function ProjectEntry({ project, figures }) {
-  const Simulation = site.features.simulations ? getSimulation(project.simulationId) : null
+  const simulationEntries = site.features.simulations
+    ? project.simulationIds || (project.simulationId ? [{ id: project.simulationId }] : [])
+    : []
   const archFigure = figures.find((f) => f.key === `${project.id}-arch`)
   const flowFigure = figures.find((f) => f.key === `${project.id}-flow`)
 
@@ -71,17 +73,26 @@ export function ProjectEntry({ project, figures }) {
           {archFigure && <Figure figure={archFigure} spec={project.diagrams.arch} />}
           {flowFigure && <Figure figure={flowFigure} spec={project.diagrams.flow} />}
 
-          {Simulation && (
-            <Suspense
-              fallback={
-                <div className="my-8 border border-line p-4 text-small text-muted">
-                  Loading the interactive demo…
-                </div>
-              }
-            >
-              <Simulation />
-            </Suspense>
-          )}
+          {simulationEntries.map(({ id, label }) => {
+            const Simulation = getSimulation(id)
+            if (!Simulation) return null
+            return (
+              <div key={id}>
+                {label && (
+                  <p className="mb-2 mt-8 text-micro text-muted first:mt-0">{label}</p>
+                )}
+                <Suspense
+                  fallback={
+                    <div className="my-8 border border-line p-4 text-small text-muted">
+                      Loading the interactive demo…
+                    </div>
+                  }
+                >
+                  <Simulation />
+                </Suspense>
+              </div>
+            )
+          })}
 
           {project.deepDive && (
             <div className="mt-8">

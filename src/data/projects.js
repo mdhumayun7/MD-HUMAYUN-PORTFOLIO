@@ -60,7 +60,10 @@ export const projects = [
       { label: 'LoRA mean token accuracy', value: '91.2%' },
       { label: 'Training loss', value: '0.463' },
     ],
-    simulationId: 'swarm-commander',
+    simulationIds: [
+      { id: 'swarm-commander', label: 'Commander comparison - the research benchmark' },
+      { id: 'drone-flight', label: 'Flight-dynamics demo - interaction design, not the benchmark' },
+    ],
     deepDive: [
       {
         heading: 'Why a uniform 12-dimensional state interface',
