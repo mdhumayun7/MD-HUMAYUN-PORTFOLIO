@@ -16,7 +16,7 @@ const EXIT_MS = 10000
 const ENTRY_MS = 10000
 const ALARM_MS = 30000
 const QUEUE_CAP = 16
-const TICK_MS = 50
+export const TICK_MS = 50
 const LOG_MAX = 14
 
 const LABEL = {
@@ -27,7 +27,7 @@ const LABEL = {
   ALARM: 'ALARM',
 }
 
-function createSim() {
+export function createSim() {
   return {
     now: 0,
     state: 'DISARMED',
@@ -55,8 +55,14 @@ function emit(s, type, src) {
     s.queued += 1
     entry.held = true
   } else {
+    // Queue full: the firmware drops the oldest queued event and counts it.
+    const oldest = [...s.log].reverse().find((e) => e.held)
+    if (oldest) {
+      oldest.held = false
+      oldest.dropped = true
+    }
     s.dropped += 1
-    entry.dropped = true
+    entry.held = true
   }
   s.log.unshift(entry)
   if (s.log.length > LOG_MAX) s.log.length = LOG_MAX
@@ -73,7 +79,7 @@ function trigger(s, cause, src) {
   setState(s, 'ENTRY_DELAY', 'entry_delay', src)
 }
 
-function pressButton(s) {
+export function pressButton(s) {
   if (s.state === 'DISARMED') {
     setState(s, 'EXIT_DELAY', 'exit_delay', 'button')
   } else {
@@ -82,13 +88,13 @@ function pressButton(s) {
   }
 }
 
-function toggleDoor(s) {
+export function toggleDoor(s) {
   s.door = !s.door
   if (s.door && s.state === 'ARMED') trigger(s, 'door_open', 'door')
   else emit(s, s.door ? 'door_open' : 'door_closed', 'door')
 }
 
-function raiseMotion(s) {
+export function raiseMotion(s) {
   // The firmware requires PIR HIGH for 150 ms past warm-up; the demo assumes
   // both are satisfied and shows the PIR line high for one second.
   s.pirUntil = s.now + 1000
@@ -108,7 +114,7 @@ function remoteDisarm(s) {
   emit(s, 'cmd_rejected', 'remote')
 }
 
-function setOnline(s, online) {
+export function setOnline(s, online) {
   if (s.online === online) return
   s.online = online
   if (online) {
@@ -123,7 +129,7 @@ function setOnline(s, online) {
   }
 }
 
-function advance(s, dt) {
+export function advance(s, dt) {
   s.now += dt
   if (s.pirRaised && s.now >= s.pirUntil) s.pirRaised = false
   const elapsed = s.now - s.since
@@ -149,7 +155,7 @@ function advance(s, dt) {
   }
 }
 
-function outputs(s) {
+export function outputs(s) {
   const t = s.now - s.since
   let buzz = s.now < s.beepUntil
   let green = false
@@ -176,7 +182,7 @@ function outputs(s) {
   return { buzz, green, red }
 }
 
-function oledLine(s) {
+export function oledLine(s) {
   const t = s.now - s.since
   const left = (dur) => Math.max(0, Math.ceil((dur - t) / 1000))
   switch (s.state) {

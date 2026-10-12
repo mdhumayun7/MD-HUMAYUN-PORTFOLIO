@@ -96,6 +96,22 @@ export function ProjectEntry({ project, figures }) {
             )
           })}
 
+          {project.images && project.images.length > 0 && (
+            <div className="mt-8 space-y-8">
+              {project.images.map((img) => {
+                const href = `${import.meta.env.BASE_URL}${img.src}`
+                return (
+                  <figure key={img.src} className="border-t border-line pt-4">
+                    <a href={href} target="_blank" rel="noreferrer noopener" className="block bg-white">
+                      <img src={href} alt={img.alt} loading="lazy" className="w-full" />
+                    </a>
+                    <figcaption className="mt-2 text-micro text-muted">{img.caption}</figcaption>
+                  </figure>
+                )
+              })}
+            </div>
+          )}
+
           {project.deepDive && (
             <div className="mt-8">
               <DeepDive sections={project.deepDive} />

@@ -15,6 +15,9 @@ import { lazy } from 'react'
 // ===========================================================================
 
 export const simulations = {
+  'smarthome-circuit': lazy(() =>
+    import('./SmartHomeCircuitSim').then((m) => ({ default: m.SmartHomeCircuitSim })),
+  ),
   'alarm-state-machine': lazy(() =>
     import('./AlarmStateMachineSim').then((m) => ({ default: m.AlarmStateMachineSim })),
   ),

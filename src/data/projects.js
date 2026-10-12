@@ -766,7 +766,22 @@ export const projects = [
     links: {
       repo: 'https://github.com/mdhumayun7/Smart-Home-Automation',
     },
-    simulationId: 'alarm-state-machine',
+    images: [
+      {
+        src: 'projects/smart-home/circuit_wiring.png',
+        alt: 'Circuit wiring diagram from the repository: ESP32 DevKit pin map to PIR, door switch, ARM button, OLED, buzzer and two LEDs',
+        caption: 'Circuit wiring, as published in the repository (docs/images/circuit_wiring.png).',
+      },
+      {
+        src: 'projects/smart-home/architecture.png',
+        alt: 'System architecture diagram from the repository: sensing, core 1 safety loop, core 0 network task, queues, outputs, MQTT broker and clients',
+        caption: 'System architecture, as published in the repository (docs/images/architecture.png).',
+      },
+    ],
+    simulationIds: [
+      { id: 'smarthome-circuit', label: 'The circuit from the Wokwi project, clickable' },
+      { id: 'alarm-state-machine', label: 'The state machine and its MQTT event stream' },
+    ],
     deepDive: [
       {
         heading: 'Why the firmware is split across two cores',
@@ -786,7 +801,7 @@ export const projects = [
       },
       {
         heading: 'Surviving bad conditions',
-        body: 'Events raised while offline go into a 16-deep queue and are delivered in order after reconnect. If the queue overflows the loss is counted instead of hidden, and v2.1 fixed a race in which an event could vanish without being counted while the network task was draining the backlog. The armed flag is written to NVS only when it changes, so a power cut while armed restores to ARMED rather than silently disarming. A failed display does not halt the system.',
+        body: 'Events raised while offline go into a 16-deep queue and are delivered in order after reconnect. If the queue overflows the oldest event is dropped and the loss is counted instead of hidden, and v2.1 fixed a race in which an event could vanish without being counted while the network task was draining the backlog. The armed flag is written to NVS only when it changes, so a power cut while armed restores to ARMED rather than silently disarming. A failed display does not halt the system.',
       },
       {
         heading: 'How it is tested, and what the tests do not prove',
@@ -845,15 +860,15 @@ export const projects = [
           {
             title: 'Queues',
             nodes: [
-              { id: 'evq', label: 'Event queue', note: '16 deep, sequence-numbered' },
-              { id: 'cmdq', label: 'Command queue', note: 'ARM, STATUS' },
+              { id: 'evq', label: 'Event queue', note: '16 deep, drops oldest' },
+              { id: 'cmdq', label: 'Command queue', note: '4 deep: ARM, STATUS' },
             ],
           },
           {
             title: 'Core 0: network task',
             nodes: [
-              { id: 'wifi', label: 'Wi-Fi + NTP', note: 'retry, timestamps' },
-              { id: 'mqtt', label: 'MQTT client', note: 'Last Will, retained state' },
+              { id: 'wifi', label: 'Wi-Fi + NTP', note: 'retry 15 s, NTP clock' },
+              { id: 'mqtt', label: 'MQTT client', note: 'Last Will, retry 5 s' },
             ],
           },
           {
