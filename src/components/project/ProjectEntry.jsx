@@ -24,6 +24,7 @@ export function ProjectEntry({ project, figures }) {
   const simulationEntries = site.features.simulations
     ? project.simulationIds || (project.simulationId ? [{ id: project.simulationId }] : [])
     : []
+  const hwFigure = figures.find((f) => f.key === `${project.id}-hw`)
   const archFigure = figures.find((f) => f.key === `${project.id}-arch`)
   const flowFigure = figures.find((f) => f.key === `${project.id}-flow`)
 
@@ -70,6 +71,7 @@ export function ProjectEntry({ project, figures }) {
           )}
 
           {/* Diagrams: architecture first, then the workflow. */}
+          {hwFigure && <Figure figure={hwFigure} spec={project.diagrams.hw} />}
           {archFigure && <Figure figure={archFigure} spec={project.diagrams.arch} />}
           {flowFigure && <Figure figure={flowFigure} spec={project.diagrams.flow} />}
 

@@ -15,6 +15,9 @@ import { lazy } from 'react'
 // ===========================================================================
 
 export const simulations = {
+  'alarm-state-machine': lazy(() =>
+    import('./AlarmStateMachineSim').then((m) => ({ default: m.AlarmStateMachineSim })),
+  ),
   'battleworld-mission': lazy(() =>
     import('./drone-flight/battlefield/BattleWorldSim').then((m) => ({ default: m.BattleWorldSim })),
   ),

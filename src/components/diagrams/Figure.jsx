@@ -11,7 +11,7 @@ export function Figure({ figure, spec }) {
   const reduced = useReducedMotion()
   if (!figure || !spec) return null
 
-  const Diagram = figure.kind === 'arch' ? ArchDiagram : FlowDiagram
+  const Diagram = figure.kind === 'arch' || figure.kind === 'hw' ? ArchDiagram : FlowDiagram
 
   return (
     <figure

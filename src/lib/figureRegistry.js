@@ -22,8 +22,8 @@ export function buildFigureIndex(projects) {
 
   projects.forEach((project) => {
     if (!project.diagrams) return
-    // Architecture first, then workflow -- consistent reading order.
-    ;['arch', 'flow'].forEach((kind) => {
+    // Hardware, then software architecture, then workflow -- consistent reading order.
+    ;['hw', 'arch', 'flow'].forEach((kind) => {
       const diagram = project.diagrams[kind]
       if (!diagram) return
       n += 1

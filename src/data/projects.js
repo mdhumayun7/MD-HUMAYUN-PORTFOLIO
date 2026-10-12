@@ -22,7 +22,7 @@
 //  deepDive      optional  [{ heading, body }] -- collapsed by default
 //  links         optional  { repo, demo, paper, video } -- any subset
 //  simulationId  optional  must match a key in components/simulations/registry.js
-//  diagrams      optional  { arch, flow } -- see the shape notes below
+//  diagrams      optional  { hw, arch, flow } (hw uses the arch shape) -- see the shape notes below
 //
 //  DIAGRAM SHAPES (rendered as SVG, no image files, themes automatically)
 //  ---------------------------------------------------------------------
@@ -746,30 +746,147 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'smart-home-surveillance',
-    secondary: true,
-    title: 'Smart Home Surveillance System',
-    tagline: 'An IoT monitoring rig on Raspberry Pi and Arduino with cloud-backed alerting.',
+    title: 'Smart Home Surveillance — ESP32 Alarm Firmware',
+    tagline:
+      'An alarm whose safety logic keeps running when Wi-Fi, MQTT and the display do not.',
     discipline: 'Systems',
-    period: 'Mar 2024 - Aug 2024',
+    period: '2024 - 2026',
     status: 'shipped',
-    tech: ['Raspberry Pi', 'Arduino', 'IoT', 'Cloud Storage'],
+    tech: ['ESP32', 'C++', 'FreeRTOS', 'MQTT', 'Wokwi', 'GitHub Actions'],
     problem:
-      'Home monitoring is only useful if it reaches you when you are not home, which turns a sensor project into a networking and storage problem.',
+      'Most hobby alarms are one loop that reads a sensor, sleeps with delay(), and talks to the network in the same breath, so a slow DNS lookup or a dropped broker connection freezes the siren. A security device has the opposite requirement: the part that decides must never wait on the part that reports.',
     contribution:
-      'I built an IoT surveillance system integrating five or more sensors and modules across Raspberry Pi and Arduino for real-time motion detection, with Wi-Fi enabled monitoring, cloud storage for captured events, and mobile and web access for continuous remote surveillance and intruder notification.',
+      'I rebuilt my first Raspberry Pi and Arduino prototype as ESP32 firmware with a hard split between deciding and reporting. The safety logic (sensor scan, arm / disarm state machine, buzzer, LEDs, OLED) runs on core 1 with no blocking delay() anywhere in its path. Wi-Fi, NTP and MQTT run as FreeRTOS tasks on core 0, and the two halves share nothing except two queues. Every event is sequence-numbered and queued for delivery when the link is down, the armed state survives a power cut, and a host-side test suite exercises the state machine in CI, including 32-bit millis() wrap-around.',
     metrics: [
-      { label: 'Sensors integrated', value: '5+' },
-      { label: 'Coverage', value: '24/7 remote' },
+      { label: 'Exit / entry delay', value: '10 s / 10 s' },
+      { label: 'Alarm timeout', value: '30 s' },
+      { label: 'Offline event queue', value: '16 deep' },
+      { label: 'Host test scenarios', value: '10 x 3 clocks' },
+    ],
+    links: {
+      repo: 'https://github.com/mdhumayun7/Smart-Home-Automation',
+    },
+    simulationId: 'alarm-state-machine',
+    deepDive: [
+      {
+        heading: 'Why the firmware is split across two cores',
+        body: 'v1 printed "Sending notification" to Serial and froze for five seconds on every alarm. Version 2 treats that as a design bug, not a tuning problem. The loop on core 1 only touches GPIO and memory, so its worst-case latency does not depend on anything outside the chip. The network task on core 0 owns Wi-Fi, NTP, MQTT and reconnection. They exchange a bounded event queue (loop to network) and a small command queue (network to loop), which means a stalled TCP call can delay a message but can never delay a siren. The loop is also supervised by the ESP32 task watchdog, and the boot event reports the reset reason, so a hang is visible afterwards instead of silent.',
+      },
+      {
+        heading: 'The state machine',
+        body: 'Five states: DISARMED, EXIT_DELAY (10 s to leave), ARMED, ENTRY_DELAY (10 s to disarm after a trigger) and ALARM (30 s siren, then back to ARMED). The ARM / DISARM button arms from DISARMED and disarms from any other state. In ARMED, a confirmed PIR rising edge or the door opening starts the entry delay. If the door is still open when the exit delay ends, that counts as a trigger. Timers are compared with unsigned subtraction so the logic stays correct when millis() wraps at 2^32, and the host tests run the same scenarios from three different clock start values to prove it.',
+      },
+      {
+        heading: 'Inputs: filtering before logic',
+        body: 'The PIR sensor needs a warm-up period and then has to stay HIGH for 150 ms before it counts, and only the rising edge of the confirmed signal can trigger, so a sensor that sits HIGH does not re-trigger forever. The door switch and button are debounced at 40 ms. The PIR is powered from 5 V (VIN) while its OUT pin is 3.3 V logic, which is why it can be wired directly to GPIO 13.',
+      },
+      {
+        heading: 'Reporting over MQTT',
+        body: 'Topics live under svnit/smarthome/<deviceId>/. availability is a retained online / offline pair backed by an MQTT Last Will, so the broker announces the device is gone even when it cannot say so itself. state is a retained JSON snapshot (state, door, pir, signal strength, counters, uptime), refreshed on change and on a 30 s heartbeat. event carries one JSON message per transition, each with a sequence number so a subscriber can detect gaps and duplicates. cmd accepts ARM and STATUS. Remote DISARM is deliberately off: it can only be enabled at compile time together with TLS and broker credentials, and otherwise the device answers cmd_rejected. A Home Assistant discovery message makes the device appear as an alarm panel.',
+      },
+      {
+        heading: 'Surviving bad conditions',
+        body: 'Events raised while offline go into a 16-deep queue and are delivered in order after reconnect. If the queue overflows the loss is counted instead of hidden, and v2.1 fixed a race in which an event could vanish without being counted while the network task was draining the backlog. The armed flag is written to NVS only when it changes, so a power cut while armed restores to ARMED rather than silently disarming. A failed display does not halt the system.',
+      },
+      {
+        heading: 'How it is tested, and what the tests do not prove',
+        body: 'tests/host/run_tests.sh compiles the state machine against stubbed Arduino, FreeRTOS, Wi-Fi, MQTT and OLED layers and runs ten scenarios (state machine, input filtering, remote commands, display failure, retry timing, offline queue ordering, overflow, JSON validity) at three millis() start values, including one just below the 32-bit wrap. It runs on every push in GitHub Actions against both arduino-esp32 2.x and 3.x. These tests check logic, not electrical behaviour: wiring, PIR sensitivity and buzzer loudness are only checked by running the circuit in the Wokwi simulator or on real hardware. The default setup uses the public HiveMQ broker, which anyone can read and write, so it is a demo configuration; the repository documents TLS and authenticated brokers for real use.',
+      },
     ],
     diagrams: {
-      flow: {
-        caption: 'Detection to notification, with storage in between.',
-        steps: [
-          { id: 'sensor', label: 'Motion sensor', detail: 'Arduino' },
-          { id: 'pi', label: 'Raspberry Pi', detail: 'capture + upload' },
-          { id: 'cloud', label: 'Cloud storage', detail: 'event archive' },
-          { id: 'alert', label: 'Alert', detail: 'mobile + web' },
+      hw: {
+        caption:
+          'Hardware: three inputs and four outputs around one ESP32 dev board. Pin numbers are GPIO numbers from the firmware.',
+        lanes: [
+          {
+            title: 'Sensors and inputs',
+            nodes: [
+              { id: 'pir', label: 'PIR motion sensor', note: 'OUT to GPIO 13, 5 V supply' },
+              { id: 'door', label: 'Door switch', note: 'GPIO 14, pull-up, HIGH = open' },
+              { id: 'btn', label: 'ARM / DISARM button', note: 'GPIO 27, pull-up, LOW = press' },
+            ],
+          },
+          {
+            title: 'Controller',
+            nodes: [{ id: 'esp', label: 'ESP32 dev board', note: 'dual core, Wi-Fi' }],
+          },
+          {
+            title: 'Outputs',
+            nodes: [
+              { id: 'buzz', label: 'Buzzer', note: 'GPIO 23, 2.7 kHz tone' },
+              { id: 'green', label: 'Green LED: armed', note: 'GPIO 26, 220 ohm' },
+              { id: 'red', label: 'Red LED: alarm', note: 'GPIO 25, 220 ohm' },
+              { id: 'oled', label: 'SSD1306 OLED', note: 'I2C: SDA 21, SCL 22' },
+            ],
+          },
         ],
+        links: [
+          { from: 'pir', to: 'esp' },
+          { from: 'door', to: 'esp' },
+          { from: 'btn', to: 'esp' },
+          { from: 'esp', to: 'buzz' },
+          { from: 'esp', to: 'green' },
+          { from: 'esp', to: 'red' },
+          { from: 'esp', to: 'oled' },
+        ],
+      },
+      arch: {
+        caption:
+          'Software: safety logic on core 1 and networking on core 0, connected only by two queues.',
+        lanes: [
+          {
+            title: 'Core 1: safety loop',
+            nodes: [
+              { id: 'filter', label: 'Input filters', note: 'debounce, PIR confirm' },
+              { id: 'fsm', label: 'State machine', note: 'no blocking delay()' },
+              { id: 'drive', label: 'Output driver', note: 'buzzer, LEDs, OLED' },
+            ],
+          },
+          {
+            title: 'Queues',
+            nodes: [
+              { id: 'evq', label: 'Event queue', note: '16 deep, sequence-numbered' },
+              { id: 'cmdq', label: 'Command queue', note: 'ARM, STATUS' },
+            ],
+          },
+          {
+            title: 'Core 0: network task',
+            nodes: [
+              { id: 'wifi', label: 'Wi-Fi + NTP', note: 'retry, timestamps' },
+              { id: 'mqtt', label: 'MQTT client', note: 'Last Will, retained state' },
+            ],
+          },
+          {
+            title: 'Outside the chip',
+            nodes: [
+              { id: 'broker', label: 'MQTT broker', note: 'availability, state, event' },
+              { id: 'sub', label: 'Subscriber', note: 'Home Assistant, dashboard' },
+            ],
+          },
+        ],
+        links: [
+          { from: 'filter', to: 'fsm' },
+          { from: 'fsm', to: 'drive' },
+          { from: 'fsm', to: 'evq', label: 'events' },
+          { from: 'evq', to: 'mqtt' },
+          { from: 'mqtt', to: 'cmdq', label: 'commands' },
+          { from: 'cmdq', to: 'fsm' },
+          { from: 'wifi', to: 'mqtt' },
+          { from: 'mqtt', to: 'broker', label: 'publish' },
+          { from: 'broker', to: 'sub' },
+        ],
+      },
+      flow: {
+        caption:
+          'Alarm lifecycle with the firmware timings. Pressing the button in any state other than DISARMED returns to DISARMED.',
+        steps: [
+          { id: 'dis', label: 'DISARMED', detail: 'ARM button or MQTT ARM' },
+          { id: 'exit', label: 'EXIT_DELAY', detail: '10 s to leave' },
+          { id: 'armed', label: 'ARMED', detail: 'PIR or door triggers' },
+          { id: 'entry', label: 'ENTRY_DELAY', detail: '10 s to disarm' },
+          { id: 'alarm', label: 'ALARM', detail: '30 s siren' },
+        ],
+        loop: { from: 'alarm', to: 'armed', label: 'alarm_end: re-arm' },
       },
     },
   },
