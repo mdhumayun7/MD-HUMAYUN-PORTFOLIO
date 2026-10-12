@@ -10,6 +10,8 @@ import { Footer } from './components/layout/Footer'
 import { SkipLink } from './components/layout/SkipLink'
 import { FigureRail } from './components/layout/FigureRail'
 import { StickyActions } from './components/layout/StickyActions'
+import { Guide } from './components/guide/Guide'
+import { CommandPalette } from './components/layout/CommandPalette'
 
 import { Hero } from './components/sections/Hero'
 import { About } from './components/sections/About'
@@ -64,6 +66,8 @@ export default function App() {
 
       <Footer />
       {site.features.stickyActions && <StickyActions />}
+      {site.features.guide && <Guide />}
+      {site.features.commandPalette && <CommandPalette />}
     </RoleProvider>
   )
 }

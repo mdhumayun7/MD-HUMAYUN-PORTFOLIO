@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react'
 import { Menu, X } from 'lucide-react'
 import { enabledSections, site } from '../../config/site'
 import { profile } from '../../data/profile'
+import { Search } from 'lucide-react'
 import { ThemeToggle } from './ThemeToggle'
+import { OPEN_EVENT } from './CommandPalette'
 import { cn } from '../../lib/cn'
 
 /**
@@ -45,6 +47,19 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          {site.features.commandPalette && (
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))}
+              aria-label="Jump to a project, role or action"
+              className="inline-flex h-9 items-center gap-2 border border-line px-2.5 text-micro text-muted
+                         transition-colors hover:border-accent hover:text-accent"
+            >
+              <Search size={14} aria-hidden />
+              <span className="hidden lg:inline">Jump to</span>
+              <kbd className="hidden border border-line px-1 text-[11px] lg:inline">Ctrl K</kbd>
+            </button>
+          )}
           {site.features.themeToggle && <ThemeToggle />}
           <button
             type="button"

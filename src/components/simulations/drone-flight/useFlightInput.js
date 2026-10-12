@@ -38,8 +38,19 @@ export function useFlightInput(onTakeoffLand) {
   })
 
   useEffect(() => {
+    // The keyboard only flies the drone while the pointer is over the 3D view.
+    // Without this the demo swallowed Space, arrows, W/A/S/D and Enter for the
+    // whole page: no typing those letters in a form, no keyboard scrolling.
+    let overView = false
+    const handlePointerOver = (e) => {
+      overView = Boolean(e.target && e.target.closest && e.target.closest('canvas'))
+    }
+    const isTyping = (t) =>
+      t && (/^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName) || t.isContentEditable || (t.closest && t.closest('[role="dialog"]')))
+
     const handleKeyDown = (e) => {
       if (e.repeat) return
+      if (!overView || isTyping(e.target)) return
       if (e.code === 'KeyT' || e.code === 'Enter') {
         onTakeoffLand?.()
         return
@@ -58,10 +69,12 @@ export function useFlightInput(onTakeoffLand) {
     const clearAll = () => {
       Object.keys(input.current).forEach((k) => (input.current[k] = false))
     }
+    window.addEventListener('pointerover', handlePointerOver, { passive: true })
     window.addEventListener('keydown', handleKeyDown)
     window.addEventListener('keyup', handleKeyUp)
     window.addEventListener('blur', clearAll)
     return () => {
+      window.removeEventListener('pointerover', handlePointerOver)
       window.removeEventListener('keydown', handleKeyDown)
       window.removeEventListener('keyup', handleKeyUp)
       window.removeEventListener('blur', clearAll)

@@ -21,8 +21,7 @@ export const site = {
     { id: 'about', enabled: true, nav: 'About' },
     { id: 'projects', enabled: true, nav: 'Work' },
     { id: 'skills', enabled: true, nav: 'Skills' },
-    // Switch this on once src/data/notes.js has at least two entries.
-    { id: 'notes', enabled: false, nav: 'Notes' },
+    { id: 'notes', enabled: true, nav: 'Notes' },
     { id: 'experience', enabled: true, nav: 'Experience' },
     { id: 'publications', enabled: true, nav: 'Research' },
     { id: 'achievements', enabled: true, nav: 'Awards' },
@@ -38,6 +37,8 @@ export const site = {
     filterBar: true,       // the discipline/tech filter above the project list
     themeToggle: true,
     roleLens: true,        // the 'I am hiring for' selector in the hero
+    commandPalette: true,  // Ctrl+K / '/' jump menu
+    guide: true,           // the scripted guide bot (cursor trail, tour, Q&A)
     stickyActions: true,   // Resume / Email bar that follows the visitor
   },
 
