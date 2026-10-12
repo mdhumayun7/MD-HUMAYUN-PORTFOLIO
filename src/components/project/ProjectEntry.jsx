@@ -70,6 +70,25 @@ export function ProjectEntry({ project, figures }) {
             </div>
           )}
 
+          {project.video && (
+            <figure className="my-8 border-t border-line pt-4">
+              <video
+                controls
+                preload="metadata"
+                playsInline
+                poster={`${import.meta.env.BASE_URL}${project.video.poster}`}
+                className="w-full bg-black"
+              >
+                <source src={`${import.meta.env.BASE_URL}${project.video.src}`} type="video/mp4" />
+                Your browser cannot play this video.
+              </video>
+              <figcaption className="mt-2 text-micro text-muted">
+                <span className="mr-2 text-accent">Demo video</span>
+                {project.video.caption}
+              </figcaption>
+            </figure>
+          )}
+
           {/* Diagrams: architecture first, then the workflow. */}
           {hwFigure && <Figure figure={hwFigure} spec={project.diagrams.hw} />}
           {archFigure && <Figure figure={archFigure} spec={project.diagrams.arch} />}

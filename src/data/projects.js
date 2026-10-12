@@ -761,10 +761,17 @@ export const projects = [
       { label: 'Exit / entry delay', value: '10 s / 10 s' },
       { label: 'Alarm timeout', value: '30 s' },
       { label: 'Offline event queue', value: '16 deep' },
-      { label: 'Host test scenarios', value: '10 x 3 clocks' },
+      { label: 'Host test runs passed', value: '84 / 84' },
     ],
     links: {
       repo: 'https://github.com/mdhumayun7/Smart-Home-Automation',
+      video: 'https://mdhumayun7.github.io/MD-HUMAYUN-PORTFOLIO/projects/smart-home/demo.mp4',
+    },
+    video: {
+      src: 'projects/smart-home/demo.mp4',
+      poster: 'projects/smart-home/demo-poster.jpg',
+      caption:
+        'Two-minute walkthrough of firmware v2.1: power-up and network join, remote ARM over MQTT, exit and entry delays, an event raised while offline, the alarm, local disarm, and the host test run in CI.',
     },
     images: [
       {
@@ -805,7 +812,7 @@ export const projects = [
       },
       {
         heading: 'How it is tested, and what the tests do not prove',
-        body: 'tests/host/run_tests.sh compiles the state machine against stubbed Arduino, FreeRTOS, Wi-Fi, MQTT and OLED layers and runs ten scenarios (state machine, input filtering, remote commands, display failure, retry timing, offline queue ordering, overflow, JSON validity) at three millis() start values, including one just below the 32-bit wrap. It runs on every push in GitHub Actions against both arduino-esp32 2.x and 3.x. These tests check logic, not electrical behaviour: wiring, PIR sensitivity and buzzer loudness are only checked by running the circuit in the Wokwi simulator or on real hardware. The default setup uses the public HiveMQ broker, which anyone can read and write, so it is a demo configuration; the repository documents TLS and authenticated brokers for real use.',
+        body: 'tests/host/run_tests.sh compiles the state machine against stubbed Arduino, FreeRTOS, Wi-Fi, MQTT and OLED layers and runs fourteen scenarios plus a TLS build check (state machine, input filtering, remote commands, display failure, retry timing, offline queue ordering, overflow, JSON validity) at three millis() start values (0, 2^31 and 2^32 - 17 s, the last just below the 32-bit wrap), against both arduino-esp32 2.x and 3.x, which is the 84 runs shown in the demo video. It runs on every push in GitHub Actions, compiled with -Wall -Wextra -Werror. These tests check logic, not electrical behaviour: wiring, PIR sensitivity and buzzer loudness are only checked by running the circuit in the Wokwi simulator or on real hardware. The default setup uses the public HiveMQ broker, which anyone can read and write, so it is a demo configuration; the repository documents TLS and authenticated brokers for real use.',
       },
     ],
     diagrams: {
