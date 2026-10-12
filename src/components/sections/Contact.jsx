@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Github, Linkedin, Mail, Phone } from 'lucide-react'
 import { site } from '../../config/site'
 import { profile } from '../../data/profile'
+import { roles } from '../../data/roles'
 import { Section } from '../layout/Section'
 import { Button } from '../ui/Button'
 
@@ -102,6 +103,15 @@ export function Contact() {
           <DirectLink Icon={Github} label="github.com/mdhumayun7" href={profile.contact.github} external />
           <DirectLink Icon={Linkedin} label="LinkedIn" href={profile.contact.linkedin} external />
           <p className="pt-2 text-micro text-muted">{profile.location}</p>
+          <div className="border-t border-line pt-4">
+            <p className="text-micro text-muted">Open to</p>
+            <ul className="mt-2 space-y-1 text-small">
+              {roles.map((r) => (
+                <li key={r.id}>{r.label}</li>
+              ))}
+              <li>Research collaboration</li>
+            </ul>
+          </div>
         </div>
       </div>
     </Section>

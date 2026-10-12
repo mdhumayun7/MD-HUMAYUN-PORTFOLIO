@@ -50,6 +50,11 @@ export const skills = [
     items: ['SDN', 'Mininet', 'POX controller', 'OpenFlow', 'Scapy', 'Wireshark', 'TCP/IP'],
   },
   {
+    category: 'Embedded & IoT',
+    items: ['ESP32', 'FreeRTOS', 'MQTT', 'Arduino', 'Raspberry Pi', 'I2C and GPIO', 'Wokwi'],
+    note: 'ESP32 firmware with a safety loop and a network task on separate cores.',
+  },
+  {
     category: 'Infrastructure',
     items: ['Docker', 'AWS (EC2, S3)', 'GitHub Actions', 'Linux', 'Git', 'Flask REST APIs', 'pytest'],
   },

@@ -1,5 +1,9 @@
 import { site } from '../../config/site'
 import { disciplines, projects } from '../../data/projects'
+import { relevance } from '../../data/roles'
+import { useRole } from '../../hooks/useRole'
+import { demoCount } from '../../lib/projectMeta'
+import { ProjectIndex } from '../project/ProjectIndex'
 import { useProjectFilter } from '../../hooks/useProjectFilter'
 import { Section } from '../layout/Section'
 import { ProjectEntry } from '../project/ProjectEntry'
@@ -13,13 +17,22 @@ import { SecondaryEntry } from '../project/SecondaryEntry'
  */
 export function Projects({ figures }) {
   const filter = useProjectFilter(projects)
+  const { role } = useRole()
 
   // Three tiers: featured work, then the rest, then earlier work compressed
   // into a list. Sorting here rather than in the data file means the data file
   // stays a plain record of what exists.
   const primary = filter.filtered
     .filter((p) => !p.secondary)
-    .sort((a, b) => Number(Boolean(b.featured)) - Number(Boolean(a.featured)))
+    .sort((a, b) => {
+      // With a role selected, relevance decides; otherwise featured work leads.
+      // Array.sort is stable, so ties keep the order of the data file.
+      if (role !== 'all') {
+        const d = relevance(b, role) - relevance(a, role)
+        if (d !== 0) return d
+      }
+      return Number(Boolean(b.featured)) - Number(Boolean(a.featured))
+    })
   const secondary = filter.filtered.filter((p) => p.secondary)
   const ordered = [...primary, ...secondary]
 
@@ -27,8 +40,10 @@ export function Projects({ figures }) {
     <Section
       id="projects"
       title="Work"
-      lead="Each entry states the problem, what I built, and what it measured. Diagrams are numbered figures; three projects have an interactive demo."
+      lead={`Each entry states the problem, what I built, and what it measured. Diagrams are numbered figures; ${demoCount(projects)} projects have an interactive demo and one has a recorded walkthrough.`}
     >
+      <ProjectIndex projects={primary} />
+
       {site.features.filterBar && (
         <ProjectFilter
           disciplines={disciplines}

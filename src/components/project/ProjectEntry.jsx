@@ -6,6 +6,7 @@ import { DeepDive } from './DeepDive'
 import { LinkRow } from './LinkRow'
 import { MetricList } from './MetricList'
 import { TechChips } from './TechChips'
+import { ShareLink } from './ShareLink'
 import { Tag } from '../ui/Tag'
 import { cn } from '../../lib/cn'
 
@@ -156,6 +157,9 @@ export function ProjectEntry({ project, figures }) {
               <LinkRow links={project.links} title={project.title} />
             </div>
           )}
+          <div className="no-print">
+            <ShareLink projectId={project.id} />
+          </div>
         </aside>
       </div>
     </article>

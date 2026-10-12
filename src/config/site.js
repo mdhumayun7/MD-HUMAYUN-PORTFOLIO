@@ -37,6 +37,8 @@ export const site = {
     simulations: true,     // set false to show diagrams only, no interactive demos
     filterBar: true,       // the discipline/tech filter above the project list
     themeToggle: true,
+    roleLens: true,        // the 'I am hiring for' selector in the hero
+    stickyActions: true,   // Resume / Email bar that follows the visitor
   },
 
   // -------------------------------------------------------------------
@@ -50,6 +52,16 @@ export const site = {
   contactForm: {
     provider: 'formspree',
     formId: null, // [FILL IN: Formspree form ID]
+  },
+
+  // -------------------------------------------------------------------
+  // ANALYTICS (optional, privacy-friendly, no cookies)
+  // Create a free site at https://www.goatcounter.com, then put its code here.
+  // For https://mysite.goatcounter.com the code is 'mysite'. Leave null to keep
+  // analytics completely off.
+  // -------------------------------------------------------------------
+  analytics: {
+    goatcounter: null, // [FILL IN: GoatCounter site code]
   },
 
   // -------------------------------------------------------------------

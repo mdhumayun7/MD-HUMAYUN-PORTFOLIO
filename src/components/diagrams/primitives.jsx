@@ -160,7 +160,13 @@ export function LaneLabel({ x, y, children }) {
 export function DiagramScroller({ minWidth, children }) {
   return (
     <div className="relative -mx-5 sm:mx-0">
-      <div className="overflow-x-auto px-5 pb-1 sm:px-0" style={{ WebkitOverflowScrolling: 'touch' }}>
+      <div
+        className="overflow-x-auto px-5 pb-1 outline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[var(--c-accent)] sm:px-0"
+        style={{ WebkitOverflowScrolling: 'touch' }}
+        tabIndex={0}
+        role="region"
+        aria-label="Diagram, scrollable"
+      >
         <div style={{ minWidth }}>{children}</div>
       </div>
       <div

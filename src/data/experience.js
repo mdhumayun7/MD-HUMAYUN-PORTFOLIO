@@ -14,6 +14,16 @@
 export const experience = [
   {
     type: 'work',
+    role: 'Teaching Assistant',
+    org: 'Sardar Vallabhbhai National Institute of Technology (SVNIT Surat)',
+    period: 'Sep 2025 - Present',
+    location: 'Surat, India',
+    bullets: [
+      'Teaching assistant for Computer Networks, Algorithms and Data Structures, Programming Fundamentals, Social Network Analysis and Machine Learning.',
+    ],
+  },
+  {
+    type: 'work',
     role: 'Research Intern — Hybrid AI-Based Autonomous Drone Swarm Navigation',
     org: 'MeitY (Ministry of Electronics & IT), Govt. of India — sponsored project at SVNIT Surat',
     period: 'May 2026 - Jul 2026',
@@ -58,6 +68,16 @@ export const experience = [
       'Applied AES and RSA cryptographic techniques to design secure communication workflows, and produced security reports with remediation recommendations.',
     ],
     tech: ['Penetration testing', 'AES', 'RSA'],
+  },
+  {
+    type: 'work',
+    role: 'Founder and Educator',
+    org: 'NITIAN RAHI',
+    period: '2021 - Present',
+    location: 'Remote',
+    bullets: [
+      'Runs an engineering education community of about 52,000 across YouTube (12K+), Facebook (40K+) and Instagram, publishing technical tutorials and career guidance for engineering students.',
+    ],
   },
   {
     type: 'education',

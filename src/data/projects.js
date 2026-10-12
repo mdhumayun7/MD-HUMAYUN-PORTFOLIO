@@ -9,6 +9,8 @@
 //  id            required  unique slug. Used for the URL anchor (#id).
 //  title         required
 //  tagline       required  one line, aim for under 90 characters
+//  roles         optional  which role lenses it is relevant to:
+//                          'ml' | 'sde' | 'embedded' | 'security'
 //  discipline    required  'ML' | 'Systems' | 'Security' | 'Automation'
 //  period        required  e.g. 'Aug 2025 - Jan 2026'
 //  tech          required  array of strings; also feeds the tech filter
@@ -42,6 +44,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'drone-swarm',
+    roles: ['ml', 'embedded'],
     title: 'Hybrid AI-Based Autonomous Drone Swarm Navigation',
     tagline:
       'A multi-agent simulator and seven competing commander architectures, benchmarked head to head.',
@@ -142,6 +145,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'vipergpt',
+    roles: ['ml'],
     title: 'Spatial Mental Modeling from Limited Views',
     tagline:
       'Reproducing and extending ViperGPT, then finding out that a no-program baseline beats it on two benchmarks.',
@@ -239,6 +243,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'ddos-sdn',
+    roles: ['security', 'sde'],
     title: 'DDoS Detection & Mitigation on an SDN Controller',
     tagline:
       'A software-defined network that identifies flooding hosts and drops their traffic without human intervention.',
@@ -329,6 +334,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'vae-latent-space',
+    roles: ['ml'],
     title: 'Latent Space Analysis with Variational Autoencoders',
     tagline:
       'Reproducing Kingma & Welling, then pushing it to faces until it broke — and finding out why.',
@@ -427,6 +433,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'medical-rag',
+    roles: ['ml', 'sde'],
     title: 'Medical Assistant on a Local RAG Pipeline',
     tagline:
       'A retrieval-augmented assistant over a 1,152-page corpus that refuses to answer from memory.',
@@ -520,6 +527,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'job-agent',
+    roles: ['sde', 'ml'],
     title: 'Multi-Source Job Intelligence Platform',
     tagline:
       'An eight-stage nightly data pipeline across eleven sources, built to degrade rather than fail.',
@@ -632,6 +640,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'face-emotion',
+    roles: ['ml'],
     secondary: true,
     title: 'Facial Expression Recognition',
     tagline: 'A convolutional classifier over seven emotion classes, running live on webcam input.',
@@ -671,6 +680,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'plant-disease',
+    roles: ['ml'],
     secondary: true,
     title: 'Plant Disease Classification',
     tagline: 'Transfer learning on ResNet50 to diagnose leaf disease from a photograph.',
@@ -708,6 +718,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'sign-language',
+    roles: ['ml'],
     secondary: true,
     title: 'Real-Time Sign Language Recognition',
     tagline: 'Hand landmarks and an LSTM recognising dynamic gestures at 30 FPS on a CPU.',
@@ -746,6 +757,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'smart-home-surveillance',
+    roles: ['embedded', 'sde'],
     title: 'Smart Home Surveillance — ESP32 Alarm Firmware',
     tagline:
       'An alarm whose safety logic keeps running when Wi-Fi, MQTT and the display do not.',
@@ -916,6 +928,7 @@ export const projects = [
   // -------------------------------------------------------------------
   {
     id: 'ips-ml',
+    roles: ['ml', 'security'],
     title: 'IPS-ML / ShieldNet — Intrusion Prevention with Explainable AI',
     tagline:
       'An inline prevention system where a false positive drops a real connection, so the cost of being wrong is measured.',
@@ -1017,6 +1030,7 @@ export const projects = [
 
   {
     id: 'backend-system-design',
+    roles: ['sde'],
     title: 'Low-Level Design — Spotify and Zomato',
     tagline:
       'Two consumer systems modelled from scratch: class design first, UML committed alongside the code.',

@@ -1,6 +1,11 @@
 import { motion } from 'framer-motion'
 import { ArrowUpRight, Code2, FileDown, Github, Linkedin, Mail } from 'lucide-react'
 import { profile } from '../../data/profile'
+import { getRole } from '../../data/roles'
+import { site } from '../../config/site'
+import { useRole } from '../../hooks/useRole'
+import { track } from '../../lib/analytics'
+import { RoleLens } from '../hero/RoleLens'
 import { useReducedMotion } from '../../hooks/useReducedMotion'
 import { Button } from '../ui/Button'
 
@@ -10,6 +15,10 @@ import { Button } from '../ui/Button'
  */
 export function Hero() {
   const reduced = useReducedMotion()
+  const { role } = useRole()
+  const activeRole = getRole(role)
+  const pitch = activeRole ? activeRole.pitch : profile.pitch
+  const resume = activeRole ? activeRole.resume : profile.contact.resume
 
   const stagger = (i) =>
     reduced
@@ -37,11 +46,11 @@ export function Hero() {
             </motion.h1>
 
             <motion.p {...stagger(2)} className="mt-6 max-w-prose text-lead">
-              {profile.pitch}
+              {pitch}
             </motion.p>
 
             <motion.div {...stagger(3)} className="mt-9 flex flex-wrap gap-3">
-              <Button href={profile.contact.resume} external variant="primary">
+              <Button href={resume} external variant="primary" onClick={() => track('resume-download')}>
                 <FileDown size={15} aria-hidden />
                 Resume
               </Button>
@@ -62,6 +71,8 @@ export function Hero() {
                 Email
               </Button>
             </motion.div>
+
+            {site.features.roleLens && <RoleLens />}
 
             {/* Credentials strip. Static values, deliberately not animated
                 counters -- a number that ticks up reads as decoration and
