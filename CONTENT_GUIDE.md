@@ -273,3 +273,12 @@ contactForm: { provider: 'formspree', formId: 'xayzbwqd' },
 ```
 
 Free tier covers 50 submissions a month.
+
+## Recruiter features
+
+- **Role lens** (`src/data/roles.js`): the "I am hiring for" buttons in the hero. Each role has a pitch, three `lookFirst` project ids and a resume PDF. Tag a project with `roles: ['ml', 'sde', ...]` in `src/data/projects.js` so it ranks for that role. A role-specific link such as `?role=embedded` opens the site with that lens already selected, which is what to put in an application for that kind of job.
+- **Overview grid and sticky bar**: generated from the same project data; nothing to maintain separately.
+- **Skills evidence** (`src/lib/skillMatch.js`): a skill links to a project when the project's `tech` list names it, or when it is listed in `EXPLICIT` there.
+- **Share pages**: `npm run build` writes `dist/p/<project-id>/index.html` for every project, so a shared link shows that project's own preview card. Preview images live in `public/og/` (1200x630, one per project). Regenerate one when a project's title, tagline or first metrics change.
+- **Analytics** (`site.analytics.goatcounter`): off until a GoatCounter site code is set. No cookies, so no consent banner is needed.
+- **Resumes**: LaTeX sources are in `resume/`; see `resume/README.md`.

@@ -34,7 +34,7 @@ const ARENA_HALF = 13
 
 // Fixed layout so the mission is reasoned-about and repeatable rather than
 // randomised on every load -- "synthetic urban scenario" in the same sense
-// the dissertation uses the term, here standing in for a small city block.
+// the research benchmark uses the term, here standing in for a small city block.
 const BUILDINGS = [
   { x: -4, z: 2, w: 1.6, d: 1.6, h: 2.2 },
   { x: 2.5, z: -1.5, w: 1.4, d: 1.4, h: 3.4 },

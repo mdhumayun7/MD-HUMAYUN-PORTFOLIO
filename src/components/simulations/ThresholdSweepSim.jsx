@@ -4,7 +4,7 @@ import { cn } from '../../lib/cn'
 
 // ===========================================================================
 //  OPERATING POINT SWEEP — interactive
-//  The central argument of the IPS-ML dissertation: argmax quietly picks an
+//  The central argument of the IPS-ML project: argmax quietly picks an
 //  operating point for you, and it is almost never the one you want inline.
 //  The three labelled thresholds below are measured full-test-set values;
 //  points between them are interpolated and the note says so.

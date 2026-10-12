@@ -1,0 +1,263 @@
+\documentclass[10pt, legalpaper]{article}
+
+\usepackage[a4paper, top=0.3in, bottom=0.3in, left=0.4in, right=0.4in]{geometry}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{hyperref}
+\usepackage[expansion=false]{microtype}
+\usepackage{xcolor}
+\usepackage{array}
+\usepackage{tabularx}
+
+% --- COLORS ---
+\definecolor{accent}{RGB}{0, 0, 0}
+\definecolor{linkblue}{RGB}{0, 70, 127}
+\definecolor{darkgray}{RGB}{35, 35, 35}
+\definecolor{medgray}{RGB}{70, 70, 70}
+
+% --- HYPERREF ---
+\hypersetup{
+    colorlinks=true,
+    urlcolor=linkblue,
+    linkcolor=linkblue,
+    pdftitle={MD Humayun - Resume},
+    pdfauthor={MD Humayun},
+    pdfsubject={ML Engineer and Software Development Engineer}
+}
+
+% --- SECTION FORMATTING ---
+\titleformat{\section}
+  {\normalsize\bfseries\color{accent}}
+  {}
+  {0em}
+  {\MakeUppercase}
+  [\vspace{-7pt}\color{accent}\rule{\linewidth}{0.8pt}\vspace{-3pt}]
+
+\titlespacing{\section}{0pt}{4pt}{2.5pt}
+
+% --- LIST SETTINGS ---
+\setlist[itemize]{
+    leftmargin=1.3em,
+    topsep=0pt,
+    itemsep=1.5pt,
+    parsep=0pt,
+    partopsep=0pt,
+    label=$\bullet$
+}
+
+% --- CUSTOM COMMANDS ---
+\newcommand{\eduentry}[4]{%
+    \noindent\textbf{#1} \hfill \textit{\color{medgray}#2}\\[1pt]
+    \noindent\textit{\color{darkgray}#3} \hfill \textbf{#4}\\[2pt]
+}
+
+\newcommand{\expentry}[3]{%
+    \noindent\textbf{#1} \hfill {\small #3}\\[1pt]
+    \noindent\textit{#2}\\[2pt]
+}
+
+\newcommand{\projentry}[4]{%
+    \noindent\textbf{#1} \hfill \textit{\small\color{medgray}#2}\\[1pt]
+    \noindent{\small\textit{\color{darkgray}#3}} \hfill \href{#4}{\small [GitHub]}\\[2pt]
+}
+
+% ============================================================
+\begin{document}
+\raggedbottom
+\tolerance=1200
+\emergencystretch=2em
+\hbadness=10000
+\pagestyle{empty}
+
+% ============================================================
+%  HEADER
+% ============================================================
+\begin{center}
+{\LARGE\bfseries MD HUMAYUN}\\[2pt]
+{\small
++91-7294963049 \textbar\
+\href{mailto:md.humayun7777777@gmail.com}{md.humayun7777777@gmail.com} \textbar\
+\href{https://www.linkedin.com/in/md-humayun-82051521a/}{LinkedIn} \textbar\
+\href{https://github.com/mdhumayun7}{GitHub} \textbar\
+\href{https://mdhumayun7.github.io/MD-HUMAYUN-PORTFOLIO/}{Portfolio} \textbar\
+\href{https://leetcode.com/u/mdhumayun7/}{LeetCode} \textbar\
+Surat, India
+}\\[3pt]
+{\small\textbf{ML Engineer \textbar\ Software Development Engineer \textbar\ C++ \textbar\ DSA \textbar\ System Design \textbar\ GATE CS 93.8 Percentile}}
+\end{center}
+
+\vspace{-2pt}
+
+% ============================================================
+%  SUMMARY
+% ============================================================
+\section{Summary}
+
+{\small
+M.Tech CS student at SVNIT Surat (GATE \textbf{93.8} percentile) working where machine learning meets systems engineering. Built an inline intrusion prevention system (IPS-ML) evaluated on \textbf{2.5M} network flows, where a false positive drops a real connection --- so it is evaluated as a control system, not a classifier. Also built a multi-agent drone swarm simulator under a MeitY-sponsored project, with a paper under review at IEEE GSCON 2027, and production-style pipelines in C++ and Python across REST APIs, SQLite, Docker and AWS.
+}
+
+% ============================================================
+%  EDUCATION
+% ============================================================
+\section{Education}
+
+\eduentry
+{Sardar Vallabhbhai National Institute of Technology (SVNIT Surat)}
+{2025 -- Present}
+{M.Tech in Computer Science (Information Security \& Privacy) \textbar\ \textbf{CPI: 8.70/10}}
+{Surat, Gujarat}
+
+\vspace{-2mm}
+\eduentry
+{Bihar Engineering University}
+{2020 -- 2024}
+{B.Tech in Computer Science Engineering \textbar\ \textbf{CGPA: 8.51/10}}
+{Patna, Bihar}
+
+% ============================================================
+%  EXPERIENCE
+% ============================================================
+\vspace{-2mm}
+\section{Professional Experience}
+
+\expentry
+{Research Intern --- Hybrid AI-Based Autonomous Drone Swarm Navigation}
+{MeitY (Ministry of Electronics \& IT), Govt. of India --- Sponsored Project, SVNIT Surat (Guide: \href{https://svnit.ac.in/maz/}{Prof. Mukesh A. Zaveri})}
+{May 2026 -- Jul 2026}
+\vspace{-2pt}
+\noindent{\small\textit{\color{darkgray}Python \textbar\ Blender \textbar\ LLMs (Groq) \textbar\ LoRA \textbar\ PPO \textbar\ Gymnasium}} \hfill {\small\textit{\color{medgray}Team project (2)} \textbar\ \href{https://drive.google.com/file/d/1zHO33qPGtrWtDfhehBWT-QbK_ZDj5pvY/view?usp=sharing}{[Demo Video]}}\\[2pt]
+\vspace{-4mm}
+\begin{itemize}
+\item Designed \textbf{BattleWorld}, a multi-agent simulator wrapped as a Gymnasium environment with a uniform \textbf{12-dimensional} state interface, so every commander --- classical or learned --- consumed identical input and the benchmark measured policy rather than input.
+\item Built the scenario pipeline: procedural urban scenes in Blender auto-labelled through an LLM annotation stage, making scenario count a parameter instead of a bottleneck.
+\item Fine-tuned an LLM with LoRA on the generated tactical labels, reaching \textbf{91.2\%} mean token accuracy at \textbf{0.463} training loss.
+\item Benchmarked \textbf{seven} commander architectures over \textbf{28} held-out scenarios; hybrid LLM+PPO reached \textbf{67.9\%} action accuracy against \textbf{60.7\%} for the best classical baseline.
+\end{itemize}
+
+\vspace{1pt}
+
+\expentry
+{Salesforce Developer Intern}
+{DST (Digital Skills Training) --- Remote}
+{Dec 2023 -- Jan 2024}
+\vspace{-4mm}
+\begin{itemize}
+\item Developed Apex triggers and automated workflows in OOP-based backend logic, cutting manual data-entry overhead by \textbf{35\%}.
+\item Customised KPI dashboards for \textbf{5+} cross-functional teams, replacing manually compiled weekly reports.
+\end{itemize}
+
+% ============================================================
+%  PUBLICATIONS
+% ============================================================
+\section{Publications}
+
+{\small
+\noindent\textbf{Hybrid AI-Based Autonomous Drone Swarm Navigation} \textbar\ \textit{\color{darkgray}Guided by Prof. Mukesh A. Zaveri, SVNIT Surat} \hfill \textit{\color{medgray}Under Review, IEEE GSCON 2027 (\#71435)}
+}
+
+% ============================================================
+%  PROJECTS
+% ============================================================
+\section{Projects}
+
+\projentry
+  {IPS-ML / ShieldNet --- Intrusion Prevention with Explainable AI \textnormal{\small(M.Tech Project)}}
+  {Aug 2025 -- Present}
+  {Python \textbar\ scikit-learn \textbar\ XGBoost \textbar\ SHAP \textbar\ CICIDS2017 \textbar\ pytest}
+  {https://github.com/mdhumayun7/ips}
+\vspace{-4mm}
+\begin{itemize}
+\item Trained six detectors and a soft-voting ensemble on \textbf{2,497,980} audited CICIDS2017 flows, evaluated on an identical held-out set of \textbf{749,394}; ensemble reached \textbf{0.8814} macro-F1 at a \textbf{0.00135} false alarm rate and \textbf{0.432 ms} median inference.
+\item Replaced argmax with a confidence-aware ALLOW / UNCERTAIN / BLOCK decision, choosing the operating point by sweeping the threshold against a stated \textbf{1\%} false-alarm budget; routing \textbf{1.62\%} of traffic to review cut missed attacks to \textbf{0.0149\%} and benign disruption to \textbf{0.0486\%}.
+\item Computed SHAP attributions inside the enforcement path and wrote them to an append-only audit log beside each action, so every block is explainable after the fact.
+\item Improved rare-class detection over the published Random Forest baseline without synthetic oversampling: SQL injection F1 \textbf{0.11 $\rightarrow$ 0.50}, Heartbleed \textbf{0.77 $\rightarrow$ 1.00}; covered by \textbf{29} unit tests with all thirteen plan deviations logged.
+\end{itemize}
+
+\vspace{1pt}
+
+\projentry
+  {Multi-Source Job Intelligence Platform}
+  {Apr 2026 -- Present}
+  {Python \textbar\ Playwright \textbar\ SQLite \textbar\ GitHub Actions \textbar\ Streamlit \textbar\ Groq}
+  {https://github.com/mdhumayun7/job-agent}
+\vspace{-4mm}
+\begin{itemize}
+\item Built a headless scraping pipeline across \textbf{11} job boards and \textbf{9} government portals, persisting \textbf{2,158} listings to SQLite with idempotent upserts and per-scraper retry isolation, so one broken source degrades that source instead of failing the run.
+\item Applied fuzzy deduplication via \texttt{SequenceMatcher} at a tuned \textbf{0.88} threshold with weighted skill scoring, reducing \textbf{793} raw records to \textbf{357} ranked matches --- a \textbf{55\%} noise cut.
+\item Made LLM enrichment optional rather than required: a Groq-hosted model re-scores listings when configured, with a rule-based scorer as fallback, so the pipeline never depends on a paid service to run.
+\item Orchestrated an \textbf{8-stage} pipeline on GitHub Actions cron, fanning out to Excel workbooks, HTML digests, email alerts and a Streamlit dashboard with no manual trigger.
+\end{itemize}
+
+\vspace{1pt}
+
+\projentry
+  {DDoS Detection \& Mitigation --- SDN + Machine Learning}
+  {Aug 2025 -- Jan 2026}
+  {Python \textbar\ Mininet \textbar\ POX \textbar\ OpenFlow \textbar\ Random Forest \textbar\ Scapy}
+  {https://github.com/mdhumayun7/ddos-5g-sdn-project}
+\vspace{-4mm}
+\begin{itemize}
+\item Implemented detection inside a POX SDN controller tracking per-host packet rate, installing OpenFlow \texttt{DROP} rules in real time so mitigation is a control-plane action rather than an external appliance.
+\item Trained a Random Forest on SDN traffic features to replace the fixed-threshold baseline, which misfires on legitimate traffic spikes.
+\item Measured impact with \texttt{iperf} and \texttt{ping} rather than asserting it: throughput fell \textbf{54.3 $\rightarrow$ 31 Gbps} and average latency rose over \textbf{10x} under an ICMP flood.
+\end{itemize}
+
+\vspace{1pt}
+
+\projentry
+  {Medical Assistant --- RAG Pipeline with Local Inference}
+  {Jan 2024 -- May 2024}
+  {Python \textbar\ LangChain \textbar\ Pinecone \textbar\ Ollama \textbar\ Flask \textbar\ Docker \textbar\ AWS EC2}
+  {https://github.com/mdhumayun7/medical-chatbot}
+\vspace{-4mm}
+\begin{itemize}
+\item Built ingestion and serving over a \textbf{1,152-page} corpus: \textbf{500}-character overlapping chunks, top-\textbf{3} retrieval, \textbf{768-dim} embeddings in a cosine Pinecone index, served by a LangChain chain behind Flask.
+\item Constrained the chain to retrieved context with an explicit refusal fallback at \textbf{temperature 0.4}, so an out-of-corpus question is refused instead of answered from parametric memory.
+\item Ran inference fully locally via Ollama (Llama 3.2, \texttt{nomic-embed-text}), removing third-party LLM API dependencies; containerised with Docker on AWS EC2.
+\end{itemize}
+
+\vspace{1pt}
+
+\projentry
+  {Latent Space Analysis with Variational Autoencoders}
+  {Feb 2026 -- Apr 2026}
+  {Python \textbar\ TensorFlow \textbar\ Keras \textbar\ NumPy \textbar\ scikit-learn}
+  {https://github.com/mdhumayun7/vae-aevb-reimplementation}
+\vspace{-4mm}
+\begin{itemize}
+\item Reproduced Kingma \& Welling's \textit{Auto-Encoding Variational Bayes} in TensorFlow --- encoder, decoder, reparameterisation trick and ELBO --- then extended it to a Conditional VAE and convolutional \textbf{128$\times$128} RGB faces.
+\item Diagnosed posterior collapse on the face model, traced it to a mis-scaled KL term, and verified recovery through latent mean and variance statistics rather than by inspecting samples, which look acceptable long before the latent space is healthy.
+\item Evaluated on \textbf{60,000} MNIST digits and \textbf{13,233} LFW faces, reaching \textbf{0.678} SSIM and \textbf{23.40 dB} PSNR on held-out data.
+\end{itemize}
+
+% ============================================================
+%  TECHNICAL SKILLS
+% ============================================================
+\section{Technical Skills}
+
+{\small
+\noindent\textbf{Languages:} C++ (primary), Python, MySQL, Bash \\
+\noindent\textbf{CS Core:} Data Structures \& Algorithms, System Design, OOP \& Design Patterns, Operating Systems, DBMS, Computer Networks, Cryptography \\
+\noindent\textbf{ML / AI:} TensorFlow, Keras, Scikit-learn, XGBoost, SHAP, LoRA, PPO, CNN, LSTM, VAE, Reinforcement Learning \\
+\noindent\textbf{LLM \& Retrieval:} LangChain, Pinecone, Ollama, Groq, RAG, Gymnasium \\
+\noindent\textbf{Web / Tools:} Flask (REST API), Docker, Git \& GitHub, GitHub Actions, AWS (EC2, S3), Linux, SDN, OpenFlow, Mininet
+}
+
+% ============================================================
+%  CERTIFICATIONS & ACHIEVEMENTS
+% ============================================================
+\section{Certifications \& Achievements}
+{\small
+\noindent\textbf{GATE CS 2025:} 93.8 Percentile (National Eligibility for M.Tech Admissions) \\
+\noindent\textbf{NPTEL:} Cloud Computing \& Ethical Hacking --- \textbf{All India Rank 33} \\
+\noindent\textbf{Summer Research Internship Certificate:} SVNIT Surat, MeitY-Sponsored Project, issued by Prof. M. A. Zaveri \\
+\noindent\textbf{IIT Bombay:} Python for Data Science, Computer Fundamentals \textbar\ \textbf{IIT Roorkee:} IoT \& Embedded Systems \\
+\noindent\textbf{Community:} Founded NITIAN RAHI --- engineering education community of \textbf{52,000+} across YouTube, Facebook and Instagram
+}
+
+\end{document}

@@ -21,7 +21,7 @@ import { loadBest, saveMissionResult, formatTime } from './missionStorage'
 //  Stated plainly, because this demo sits right next to two research
 //  results: the swarm-mate and sentry behaviour are simple, hand-written
 //  steering rules I wrote for this demo, not the trained PPO/LLM commander
-//  policies from the dissertation, and "neutralising" a sentry is a
+//  policies from the research benchmark, and "neutralising" a sentry is a
 //  stylised signal-disable effect, not a weapons simulation.
 // ===========================================================================
 
@@ -82,7 +82,7 @@ export function BattleWorldSim() {
   }, [])
 
   const note =
-    'A small mission built on the same flight model as the flight-dynamics demo above, with three AI swarm-mates and five sentry drones added. The swarm-mate and sentry behaviour are simple steering rules I wrote for this demo -- not the trained PPO/LLM commander policies from the dissertation -- and "neutralising" a sentry is a stylised signal-disable effect, not a weapons simulation. Your best time is saved in this browser.'
+    'A small mission built on the same flight model as the flight-dynamics demo above, with three AI swarm-mates and five sentry drones added. The swarm-mate and sentry behaviour are simple steering rules I wrote for this demo -- not the trained PPO/LLM commander policies from the research benchmark -- and "neutralising" a sentry is a stylised signal-disable effect, not a weapons simulation. Your best time is saved in this browser.'
 
   if (!webglOk) {
     return (
